@@ -1,15 +1,31 @@
 package com.example.bayuleo.testhttp;
 
+import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,16 +46,24 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
+
 public class MainActivity extends AppCompatActivity {
-    private Timer myTimer;
 
-    private String url_saklar = "https://api.thingspeak.com/update.json?api_key=5A8ZVNQJX3GY2OUE&field1=";
-    private String url_get = "https://api.thingspeak.com/channels/479672/feeds.json?results=5";
+
+    public static String FIELD_KEY = "field";
+
+    public Timer myTimer;
+
+    private String url_saklar = "https://api.thingspeak.com/update.json?api_key=5A8ZVNQJX3GY2OUE&field";
+    private String url_get = "https://api.thingspeak.com/channels/479672/feeds.json?results=100";
     OkHttpClient client = new OkHttpClient();
+    String html = "<iframe width=\"450\" height=\"260\" style=\"border: 1px solid #cccccc;\" src=\"https://thingspeak.com/channels/479672/widgets/2759\"></iframe>";
 
-    TextView textView;
-    Button buttonON, buttonOFF, buttonJ;
-    String valamat;
+    TextView textView0;
+    Button buttonON, buttonOFF, buttonHal1, buttonHal2, buttonHal3, buttonHal4;
+    public String[] think = new String[10];
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +79,28 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 1000);
 
         //Inisialisasi textView dan button
-        textView = (TextView) findViewById(R.id.textView3);
+        textView0 = (TextView) findViewById(R.id.textView0);
         buttonON = (Button) findViewById(R.id.buttonON);
         buttonOFF = (Button) findViewById(R.id.buttonOFF);
-        buttonJ = findViewById(R.id.buttonJson);
+        buttonHal1 = findViewById(R.id.buttonPindahHal1);
+        buttonHal2 = findViewById(R.id.buttonPindahHal2);
+        buttonHal3 = findViewById(R.id.buttonPindahHal3);
+        buttonHal4 = findViewById(R.id.buttonPindahHal4);
+
+
+
+
+        final Intent pergiKe = new Intent(MainActivity.this, Halaman1.class);
+
 
 
         //method pada saat button proses diklik
         buttonON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saklarSet("1");
+                saklarSet(2,"0");
                 Toast.makeText(MainActivity.this, "Saklar ON", Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -74,17 +108,56 @@ public class MainActivity extends AppCompatActivity {
         buttonOFF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saklarSet("5");
+                saklarSet(2,"1");
                 Toast.makeText(MainActivity.this, "Saklar OFF", Toast.LENGTH_SHORT).show();
+                snackbar = Snackbar.make(view, "Uji Coba Snackbar", Snackbar.LENGTH_LONG);
+                snackbar.setAction("Klik me", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+
+                    }
+                });
+                snackbar.show();
             }
         });
 
-        buttonJ.setOnClickListener(new View.OnClickListener() {
+        buttonHal1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ambiljson();
+                int field = 1;
+                pergiKe.putExtra(FIELD_KEY,field);
+                startActivity(pergiKe);
             }
         });
+
+        buttonHal2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int field = 2;
+                pergiKe.putExtra(FIELD_KEY,field);
+                startActivity(pergiKe);
+            }
+        });
+
+        buttonHal3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int field = 3;
+                pergiKe.putExtra(FIELD_KEY,field);
+                startActivity(pergiKe);
+            }
+        });
+
+        buttonHal4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int field = 4;
+                pergiKe.putExtra(FIELD_KEY, field);
+                startActivity(pergiKe);
+            }
+        });
+
 
 
 
@@ -95,8 +168,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void saklarSet(String val){
-        //String url = "https://api.thingspeak.com/update.json?api_key=5A8ZVNQJX3GY2OUE&field1="+val+"";
+    public void generateNotification(String judul, String deskripsi){
+        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(judul)
+                .setContentText(deskripsi);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, mBuilder.build());
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(alarmSound);
+    }
+
+    public void saklarSet(int noField, String val){
+        //String url = "https://api.thingspeak.com/update.json?api_key=5A8ZVNQJX3GY2OUE&field2="+val+"";
         //Membuat intace baru
         //OkHttpClient client = new OkHttpClient();
 
@@ -105,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Membuat Request
         Request request = new Request.Builder()
-                .url(url_saklar+val)
+                .url(url_saklar+noField+"="+val)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -138,12 +222,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-            ambiljson();
+            ambiljson(textView0,1);
 
         }
     };
 
-    public void ambiljson(){
+    public void ambiljson(final TextView td, final int thingspeak){
         Request request = new Request.Builder()
                 .url(url_get)
                 .cacheControl(new CacheControl.Builder().noCache().build())
@@ -164,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            parsingarray(hasil);
+                            parsingarray(hasil, td, thingspeak);
                         }
                     });
                 }
@@ -175,27 +259,59 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void parsingarray(String datajson){
+    private void parsingarray(String datajson, TextView tv, int var){
         try {
             JSONObject jsonObj = new JSONObject(datajson); //ambil object json
-            Log.d("Run","run" + jsonObj);
+//            Log.d("","Run Json" + jsonObj);
             //JSONObject jsonpandawa = jsonObj.getJSONObject("feeds"); //ambil obj pandawa
-            Log.d("Run","run2");
+//            Log.d("Run","run2");
             //JSONArray anggota = jsonpandawa.getJSONArray("feeds"); //ambil array anggota
             JSONArray anggota = jsonObj.getJSONArray("feeds");
-            Log.d("Run","run3");
-            //for (int i = 0; i < anggota.length(); i++) {
-                //JSONObject jsonobject = anggota.getJSONObject(i);
-            JSONObject jsonobject = anggota.getJSONObject(anggota.length()-1);
+//            Log.d("Run","run3");
+            for (int i = 0; i < anggota.length(); i++) {
+                JSONObject jsonobject = anggota.getJSONObject(i);
+            //JSONObject jsonobject = anggota.getJSONObject(anggota.length()-1);
                 //vfild = jsonobject.getString("feeds");
-                valamat = jsonobject.getString("field1");
-            //}
+                for (int x = 1;x<9;x++){
+                    String posisi = Integer.toString(x);
+                    //Log.d(posisi,"ini nilai posisi");
+                    String temp = jsonobject.getString("field"+posisi);
+                    if (!temp.equals("null")){
+                        think[x] = temp;
+                    }
+                }
+
+
+
+
+//            think[1] = jsonobject.getString("field1");
+//            think[2] = jsonobject.getString("field2");
+//            think[3] = jsonobject.getString("field3");
+//            think[4] = jsonobject.getString("field4");
+//            think[5] = jsonobject.getString("field5");
+//            think[6] = jsonobject.getString("field6");
+//            think[7] = jsonobject.getString("field7");
+//            think[8] = jsonobject.getString("field8");
+            }
             //tnama.setText(vnama);
-            textView.setText(valamat);
+            if (!think[var].equals("null")) {
+                Double a = Double.parseDouble(think[var]);
+                Integer b = a.intValue();
+                tv.setText(b.toString());
+            }
         } catch (Throwable t) {
             Log.e("My App", "Could not parse malformed JSON: \"" + datajson + "\"");
         }
     }
+
+    public void inputFirebase(String firebase_url, String firebase_value){
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference(firebase_url);
+        myRef.setValue(firebase_value);
+    }
+
+
 
 
 }
