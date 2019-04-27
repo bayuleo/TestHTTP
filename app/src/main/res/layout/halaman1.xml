@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#021c1e">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:textSize="8dp"
+        android:textColor="@color/font"
+        />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Watt"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="@color/font"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/textViewCurHal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Value"
+        android:textSize="24sp"
+        android:textColor="@color/font"
+        android:layout_gravity="center_horizontal"/>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="120dp"
+        android:layout_height="2dp"
+        android:background="#FFFFFF"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/textViewCaptionKWH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Usage"
+        android:textSize="14sp"
+        android:textColor="#004445"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Limit Power"
+                android:textStyle="bold"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"/>
+
+            <EditText
+                android:id="@+id/editTextLimit"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:hint="0 Watt"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"/>
+
+            <Switch
+                android:id="@+id/switchLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Limit"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status Relay"
+                android:textStyle="bold"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/textViewOnOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ON/OFF"
+                android:textAllCaps="false"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="-15dp"/>
+
+            <Switch
+                android:id="@+id/switchOnOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:checked="false"
+                android:text="Power"
+                android:textOn="ON"
+                android:textColor="@color/font"
+                android:layout_gravity="center_horizontal"
+                tools:checked="false"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/textViewDump"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/font"-->
+        <!--tools:layout_editor_absoluteX="323dp"-->
+        <!--tools:layout_editor_absoluteY="4dp" />-->
+
+
+
+    <TextView
+        android:id="@+id/textViewCurHal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="TextView"
+        android:textSize="60sp"
+        android:textColor="@color/font"
+        android:layout_gravity="center"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="250dp"
+        android:layout_height="2dp"
+        android:background="#FFFFFF"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/textViewCaptionWatt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Usage"
+        android:textSize="24sp"
+        android:textColor="#004445"
+        android:layout_gravity="center_horizontal"/>
+
+
+</LinearLayout>

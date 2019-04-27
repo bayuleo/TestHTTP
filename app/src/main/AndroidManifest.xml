@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bayuleo.testhttp"
-    xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.bayuleo.testhttp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        tools:replace="label"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Arlectric App"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/arlectric"
+        android:label="Arlectric"
+        android:roundIcon="@mipmap/arlectric_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="label">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Halaman1"
-            android:parentActivityName=".MainActivity">
-        </activity>
+        <activity
+            android:name=".Halaman1"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".PieChartTest" />
     </application>
 
 </manifest>
